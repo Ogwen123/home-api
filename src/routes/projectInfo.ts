@@ -29,8 +29,8 @@ export default (req: express.Request, res: express.Response) => {
             try {
                 data = data.result
 
-                const latestDeploymentGitHash = (data.latest_deployment.deployment_trigger.type !== undefined && data.latest_deployment.deployment_trigger.type.includes("github") ? data.latest_deployment.deployment_trigger.metadata.commit_hash : "")
-                const currentDeploymentGitHash = (data.canonical_deployment.deployment_trigger.type !== undefined && data.canonical_deployment.deployment_trigger.type.includes("github") ? data.canonical_deployment.deployment_trigger.metadata.commit_hash : "")
+                const latestDeploymentGitHash = (data.latest_deployment !== undefined && data.latest_deployment.deployment_trigger.type.includes("github") ? data.latest_deployment.deployment_trigger.metadata.commit_hash : "")
+                const currentDeploymentGitHash = (data.canonical_deployment !== undefined && data.canonical_deployment.deployment_trigger.type.includes("github") ? data.canonical_deployment.deployment_trigger.metadata.commit_hash : "")
 
                 const latestDeployment = {
                     id: data.latest_deployment.id,
