@@ -64,7 +64,7 @@ export default (req: express.Request, res: express.Response) => {
                     subdomain: data.subdomain,
                     domains: data.domains,
                     latest_deployment: latestDeployment,
-                    current_deployment: currentDeployment
+                    current_deployment: currentDeployment,
                 }
 
                 success(res, formattedData, 200, "Done")
