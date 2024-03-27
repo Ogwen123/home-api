@@ -14,7 +14,7 @@ export default (req: express.Request, res: express.Response) => {
     const valid = validate(SCHEMA, req.body || {})
 
     if (valid.error) {
-        return error(res, 401, valid.data)
+        return error(res, 400, valid.data)
     }
 
     const data = valid.data
@@ -32,26 +32,34 @@ export default (req: express.Request, res: express.Response) => {
                 const latestDeploymentGitHash = (data.latest_deployment !== undefined && data.latest_deployment.deployment_trigger.type.includes("github") ? data.latest_deployment.deployment_trigger.metadata.commit_hash : "")
                 const currentDeploymentGitHash = (data.canonical_deployment !== undefined && data.canonical_deployment.deployment_trigger.type.includes("github") ? data.canonical_deployment.deployment_trigger.metadata.commit_hash : "")
 
-                const latestDeployment = {
-                    id: data.latest_deployment.id,
-                    environment: data.latest_deployment.environment,
-                    created_on: data.latest_deployment.created_on,
-                    modified_on: data.latest_deployment.modified_on,
-                    status: data.latest_deployment.latest_stage.status,
-                    git_hash: latestDeploymentGitHash
+                let latestDeployment: false | { [key: string]: string } = false
+
+                if (data.latest_deployment) {
+                    latestDeployment = {
+                        //id: data.latest_deployment.id,
+                        environment: data.latest_deployment.environment,
+                        created_on: data.latest_deployment.created_on,
+                        modified_on: data.latest_deployment.modified_on,
+                        status: data.latest_deployment.latest_stage.status,
+                        git_hash: latestDeploymentGitHash
+                    }
                 }
 
-                const currentDeployment = {
-                    id: data.canonical_deployment.id,
-                    environment: data.canonical_deployment.environment,
-                    created_on: data.canonical_deployment.created_on,
-                    modified_on: data.canonical_deployment.modified_on,
-                    status: data.canonical_deployment.latest_stage.status,
-                    git_hash: currentDeploymentGitHash
+                let currentDeployment: false | { [key: string]: string } = false
+
+                if (data.canonical_deployment) {
+                    currentDeployment = {
+                        //id: data.canonical_deployment.id,
+                        environment: data.canonical_deployment.environment,
+                        created_on: data.canonical_deployment.created_on,
+                        modified_on: data.canonical_deployment.modified_on,
+                        status: data.canonical_deployment.latest_stage.status,
+                        git_hash: currentDeploymentGitHash
+                    }
                 }
 
                 const formattedData = {
-                    id: data.id,
+                    //id: data.id,
                     name: data.name,
                     subdomain: data.subdomain,
                     domains: data.domains,
@@ -59,11 +67,10 @@ export default (req: express.Request, res: express.Response) => {
                     current_deployment: currentDeployment
                 }
 
-                console.log(formattedData)
-
                 success(res, formattedData, 200, "Done")
             } catch (e) {
-                error(res, 400, "Something went wrong when fetching and parsing data.")
+                console.error(e)
+                error(res, 400, "Something went wrong when fetching and parsing data. This could be because the project you entered does not exsit.")
             }
         })
     })

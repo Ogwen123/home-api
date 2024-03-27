@@ -11,7 +11,23 @@ const port = 3000
 
 //app.use(express.json())
 app.use(bodyParser.json())
-app.use(cors())
+
+const headers = {
+    "Access-Control-Allow-Credentials": "true",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,HEAD,POST,PATCH,DELETE,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, token",
+    "Access-Control-Max-Age": "86400",
+    "Content-Type": "application/json"
+}
+
+app.options('/*', function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,POST,PATCH,DELETE,OPTIONS")
+    res.header("Access-Control-Max-Age", "86400")
+    next();
+});
 
 app.get('/', (req, res) => {
     res.send({
@@ -23,4 +39,6 @@ app.post("/api/project_info", (req, res) => {
     projectInfo(req, res)
 })
 
-app.listen(port, "0.0.0.0")
+app.listen(port, "0.0.0.0", () => {
+    console.log("loaded")
+})
