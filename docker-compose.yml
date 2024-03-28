@@ -4,6 +4,6 @@ services:
     ports:
       - 3334:3000
     environment:
-      - API_TOKEN=iQWVEB2mk_P0OHJd5foViLJ1Jp719OHTnKwqSIbC
+      - API_TOKEN=BXmN1jjAdfrwfY2-s9trLd_A8TqxFWLkD0_HJyB2
       - ACCOUNT_ID=1e501331eb02a2c6d2b417515d74f28e
     restart: unless-stopped
