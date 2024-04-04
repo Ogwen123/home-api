@@ -9,7 +9,7 @@ import { error } from "./utils/api.ts"
 dotenv.config()
 
 const app = express()
-const port = 3000
+const port = 3003
 
 //app.use(express.json())
 app.use(bodyParser.json())
@@ -32,15 +32,25 @@ app.use('/*', function (req, res, next) {
 });
 
 app.use("/api/*", async (req, res, next) => {
-    const enabled = (await prisma.services.findUnique({
+    let enabled
+    const enabledRes = (await prisma.services.findUnique({
         where: {
-            id: "abc3d324-9055-4cb5-8c3e-34a3da32b847"
+            id: "d795fae3-579d-4f89-a798-3bae523972d2"
         },
         select: {
             enabled: true
         }
-    }))?.enabled
+    }))
 
+    if (enabledRes === undefined || enabledRes === null) {
+        enabled = true
+    } else {
+        enabled = enabledRes.enabled
+    }
+
+    //console.log(enabledRes)
+
+    //console.log(enabled)
     if (enabled) {
         next();
     } else {
@@ -63,7 +73,7 @@ app.get('/', async (req, res) => {
     })
 })
 
-app.post("/api/project_info", (req, res) => {
+app.post("/api/project-info", (req, res) => {
     projectInfo(req, res)
 })
 

@@ -69,7 +69,7 @@ export default (req: express.Request, res: express.Response) => {
 
                 success(res, formattedData, 200, "Done")
             } catch (e) {
-                console.error(e)
+                //console.error(e)
                 error(res, 400, "Something went wrong when fetching and parsing data. This could be because the project you entered does not exsit.")
             }
         })
