@@ -9,6 +9,8 @@ COPY ./prisma ./prisma
 #COPY ./config.json .
 # COPY --from=prerelease /usr/src/app/node_modules/.prisma /node_modules/.prisma
 
+#RUN bun install
+
 RUN bunx prisma generate --schema ./prisma/schema.prisma
 
 # run the app
